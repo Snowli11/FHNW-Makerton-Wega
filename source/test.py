@@ -5,21 +5,26 @@ import matplotlib.pyplot as plt
 
 path_results = r'C:\Users\pjeiz\Project Makertron FHNW\FHNW-Makerton-Wega\XY_data\wrist_XY_01_filtered.csv'
 raw_path = pd.read_csv(r'C:\Users\pjeiz\Project Makertron FHNW\FHNW-Makerton-Wega\XY_data\wrist_XY_01.csv')
+raw_path = pd.DataFrame(raw_path)
+#raw_path = raw_path[raw_path.label == 14]
 
 def fourierTransformAllAxies(raw_path):
     row_X = fourierTransform('X', raw_path)
+    print(row_X)
     row_Y = fourierTransform('Y', raw_path)
     row_Z = fourierTransform('Z', raw_path)
     
     row_X.columns = ['Accelerometer X']
     row_Y.columns = ['Accelerometer Y']
     row_Z.columns = ['Accelerometer Z']
+    print(row_X)
     
     df_results = raw_path
     print(df_results)
     df_results['Accelerometer X'] = row_X['Accelerometer X']
     df_results['Accelerometer Y'] = row_Y['Accelerometer Y']
     df_results['Accelerometer Z'] = row_Z['Accelerometer Z']
+    print(df_results)
     
     return df_results
 
@@ -36,10 +41,7 @@ def fourierTransform(axis, raw_path, lowfilter=256):
     fs = 256
     T = 1.0 / fs
     xf = rfftfreq(N, T)
-    xf_int = xf.astype(int)
     print(len(xf))
-
-    xf_filtered = []
 
     for index, x in enumerate(xf):
         if x >= lowfilter:
